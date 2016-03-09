@@ -34,7 +34,7 @@ class ViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        secondaryMenu.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+        secondaryMenu.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
         secondaryMenu.translatesAutoresizingMaskIntoConstraints = false
         scaleFactor = UIScreen.mainScreen().scale
         originalImage = imageView.image
@@ -133,7 +133,7 @@ class ViewController: UIViewController,
         self.secondaryMenu.alpha = 0
 
         UIView.animateWithDuration(0.4){
-            self.secondaryMenu.alpha = 1.0
+            self.secondaryMenu.alpha = 1
         }
     }
     
@@ -189,7 +189,7 @@ class ViewController: UIViewController,
         filter!.setValue(upperLevel, forKey: "inputMaxComponents")
         
         filteredImage = UIImage(CGImage: context.createCGImage(filter!.outputImage!,
-            fromRect: filter!.outputImage!.extent))
+            fromRect: filter!.outputImage!.extent), scale: originalImage!.scale, orientation: originalImage!.imageOrientation)
         
         isShowingOriginal = false
         imageView.image = filteredImage
@@ -205,7 +205,7 @@ class ViewController: UIViewController,
         filter!.setValue(inputImage, forKey: kCIInputImageKey)
         
         filteredImage = UIImage(CGImage: context.createCGImage(filter!.outputImage!,
-            fromRect: filter!.outputImage!.extent))
+            fromRect: filter!.outputImage!.extent), scale: originalImage!.scale, orientation: originalImage!.imageOrientation)
         
         isShowingOriginal = false
         imageView.image = filteredImage
@@ -219,20 +219,21 @@ class ViewController: UIViewController,
         filter!.setValue(inputImage, forKey: kCIInputImageKey)
         
         filteredImage = UIImage(CGImage: context.createCGImage(filter!.outputImage!,
-            fromRect: filter!.outputImage!.extent))
-        
+            fromRect: filter!.outputImage!.extent), scale: originalImage!.scale, orientation: originalImage!.imageOrientation)
+       
         isShowingOriginal = false
         imageView.image = filteredImage
     }
     
     @IBAction func onLinoToggle(sender: AnyObject) {
+        
         let inputImage = CIImage(image:originalImage!)
         
         let filter = CIFilter(name:"CIPhotoEffectMono")
         filter!.setValue(inputImage, forKey: kCIInputImageKey)
         
         filteredImage = UIImage(CGImage: context.createCGImage(filter!.outputImage!,
-            fromRect: filter!.outputImage!.extent))
+            fromRect: filter!.outputImage!.extent), scale: originalImage!.scale, orientation: originalImage!.imageOrientation)
         
         isShowingOriginal = false
         imageView.image = filteredImage
@@ -243,13 +244,18 @@ class ViewController: UIViewController,
         
         let fluxitImage = CIImage(image: UIImage(named:"fluxit")!)
         
+        
+        
         let beginImage = CIImage(image: filteredImage!)
         let filter = CIFilter(name:"CIOverlayBlendMode")
         
+
         filter!.setValue(fluxitImage, forKey:kCIInputImageKey)
+
         filter!.setValue(beginImage, forKey:kCIInputBackgroundImageKey)
+        
         filteredImage = UIImage(CGImage: context.createCGImage(filter!.outputImage!,
-            fromRect: filter!.outputImage!.extent))
+            fromRect: filter!.outputImage!.extent), scale: originalImage!.scale, orientation: originalImage!.imageOrientation)
         imageView.image = filteredImage
         
     }
